@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chrome Extension</title>
+</head>
+<body>
+
+    <div>
+        <h2>Profile Management</h2>
+        <label for="profile-name">Profile Name:</label>
+        <input type="text" id="profile-name" placeholder="Enter profile name" style="margin: 5px;" />
+        <button id="load-profile" style="margin: 5px;">Load Profile</button>
+        <button id="delete-profile" style="margin: 5px;">Delete Profile</button>
+    </div>
+    
+    <div>
+        <h2>Saved Forms</h2>
+        <label for="saved-forms">Saved Forms:</label>
+        <select id="saved-forms" style="margin: 5px;">
+            <option value="">Select a saved form</option>
+        </select>
+        <button id="load-form" style="margin: 5px;">Load Selected Form</button>
+        <button id="delete-saved-form" style="margin: 5px;">Delete Selected Form</button>
+    </div>
+    
+    <h2>Enter your information</h2>
+    <div>
+
+            <form action="">
+               <fieldset>
+                <legend>Personal information</legend>
+                <label for="fname">FirstName:</label>
+                <input type="text" id="fname" name="FirstName" style="margin: 5px;" >
+                <br>
+                <label for="lname">LastName:</label>
+                <input type="text" id="lname" name="LastName" style="margin: 5px;" >
+                <br>
+               </fieldset>
+
+             <fieldset>
+                <legend>Education</legend>
+                <p>Education level:</p>
+            
+                <input type="radio" name="edu"  value="High School" id="high_edu">
+                <label for="high_edu">High School</label>
+
+                <input type="radio" name="edu"  value="Bachelor" id="bac_edu">
+                <label for="bac_edu">Bachelor</label>
+
+                <input type="radio" name="edu"  value="Master" id="mas_edu">
+                <label for="mas_edu">Master</label>
+
+             </fieldset>
+
+                <fieldset>
+                    <legend>Experience</legend>
+                    <br>
+                <label for="experience">Experience</label>
+                <textarea name="message" id="experience" name="experience" rows="5" cols="15" style="margin: 5px;"></textarea >
+                <br>
+
+                <label for="skills">Skills</label>
+                <textarea name="message" id="skills" name="skills" rows="5" cols="15" style="margin: 5px;"></textarea >
+                    <br>
+
+                   
+
+                    <label for="certificates">Certificates:</label>
+
+<textarea id="certificates" name="certificates" rows="3" cols="15" style="margin: 5px;"></textarea>
+<br>
+<label for="portfolio">Portfolio Link:</label>
+<input type="url" id="portfolio" name="portfolio" style="margin: 5px;">
+<br>
+<label for="summary">Personal Summary:</label>
+<textarea id="summary" name="summary" rows="5" cols="15" style="margin: 5px;"></textarea>
+<br>
+
+                </fieldset>
+<fieldset>
+    <legend>Buttons</legend>
+    
+<button type="button" id="save_btn">Save</button>
+
+<input type="submit" value="Submit"  name="Submit" style="margin: 5px;" >
+
+<input type="reset" id="reset" value="Reset" name="Reset" style="margin: 5px;">
+
+<button type="button" id="add_value" style="margin: 5px;">Add new field</button>
+<br>
+<button id="fetch_linkedin" style="margin: 5px;">Fetch LinkedIn Data</button>
+</fieldset>
+
+            </form>
+
+
+
+
+
+    </div>
+    
+
+    <script src="popup.js"></script>
+</body>
+</html>
