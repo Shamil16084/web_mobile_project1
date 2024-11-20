@@ -24,6 +24,42 @@
         <button id="load-form" style="margin: 5px;">Load Selected Form</button>
         <button id="delete-saved-form" style="margin: 5px;">Delete Selected Form</button>
     </div>
+
+    <div>
+        <h2>Job Application Dashboard</h2>
+        <table id="dashboard-table"  style="width: 100%; margin-top: 10px; border: 1px solid black">
+            <thead>
+                <tr>
+                    <th>Company</th>
+                    <th>Job Title</th>
+                    <th>Date Applied</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Job applications will be dynamically added here -->
+            </tbody>
+        </table>
+        <h3>Add New Application</h3>
+        <form id="add-job-form">
+            <label for="company">Company:</label>
+            <input type="text" id="company" required>
+            <label for="title">Job Title:</label>
+            <input type="text" id="title" required>
+            <label for="date">Date Applied:</label>
+            <input type="date" id="date" required>
+            <label for="status">Status:</label>
+            <select id="status">
+                <option value="Applied">Applied</option>
+                <option value="Interview">Interview</option>
+                <option value="Offer">Offer</option>
+                <option value="Rejected">Rejected</option>
+            </select>
+            <button type="button" id="add-job-btn">Add Job</button>
+        </form>
+    </div>
+    
     
     <h2>Enter your information</h2>
     <div>

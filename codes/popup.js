@@ -292,3 +292,90 @@ document.getElementById("delete-profile").addEventListener("click", () => {
     deleteProfile(profileName);
 });
 
+
+// last changes
+// Load job applications from localStorage and render the dashboard
+function loadDashboard() {
+    const jobApplications = JSON.parse(localStorage.getItem("jobApplications")) || [];
+    const tableBody = document.querySelector("#dashboard-table tbody");
+
+    // Clear existing rows
+    tableBody.innerHTML = "";
+
+    // Populate the table
+    jobApplications.forEach((job, index) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${job.company}</td>
+            <td>${job.title}</td>
+            <td>${job.date}</td>
+            <td>${job.status}</td>
+            <td>
+                <button class="delete-btn" data-index="${index}">Delete</button>
+                <button class="edit-btn" data-index="${index}">Edit</button>
+            </td>
+        `;
+        tableBody.appendChild(row);
+    });
+}
+
+// Call loadDashboard on page load
+document.addEventListener("DOMContentLoaded", loadDashboard);
+// Add a new job application
+document.getElementById("add-job-btn").addEventListener("click", () => {
+    const company = document.getElementById("company").value;
+    const title = document.getElementById("title").value;
+    const date = document.getElementById("date").value;
+    const status = document.getElementById("status").value;
+
+    if (!company || !title || !date || !status) {
+        alert("Please fill out all fields!");
+        return;
+    }
+
+    const newJob = { company, title, date, status };
+
+    // Retrieve existing job applications or initialize
+    const jobApplications = JSON.parse(localStorage.getItem("jobApplications")) || [];
+    jobApplications.push(newJob);
+    localStorage.setItem("jobApplications", JSON.stringify(jobApplications));
+
+    // Clear form fields
+    document.getElementById("company").value = "";
+    document.getElementById("title").value = "";
+    document.getElementById("date").value = "";
+    document.getElementById("status").value = "Applied";
+
+    alert("Job application added successfully!");
+    loadDashboard(); // Refresh the dashboard
+});
+// Handle delete button clicks
+document.querySelector("#dashboard-table").addEventListener("click", (event) => {
+    if (event.target.classList.contains("delete-btn")) {
+        const index = event.target.dataset.index;
+        const jobApplications = JSON.parse(localStorage.getItem("jobApplications")) || [];
+        jobApplications.splice(index, 1); // Remove the selected job application
+        localStorage.setItem("jobApplications", JSON.stringify(jobApplications));
+        alert("Job application deleted successfully!");
+        loadDashboard(); // Refresh the dashboard
+    }
+});
+// Handle edit button clicks
+document.querySelector("#dashboard-table").addEventListener("click", (event) => {
+    if (event.target.classList.contains("edit-btn")) {
+        const index = event.target.dataset.index;
+        const jobApplications = JSON.parse(localStorage.getItem("jobApplications")) || [];
+        const job = jobApplications[index];
+
+        // Populate form fields with the selected job's data
+        document.getElementById("company").value = job.company;
+        document.getElementById("title").value = job.title;
+        document.getElementById("date").value = job.date;
+        document.getElementById("status").value = job.status;
+
+        // Remove the existing job application from the list
+        jobApplications.splice(index, 1);
+        localStorage.setItem("jobApplications", JSON.stringify(jobApplications));
+        loadDashboard(); // Refresh the dashboard
+    }
+});
