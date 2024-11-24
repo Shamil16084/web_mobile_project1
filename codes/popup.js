@@ -139,73 +139,6 @@ document.getElementById("save_btn").addEventListener("click" , ()=>{
         updateSavedFormsDropdown();
     });
     
-    document.getElementById("fetch_linkedin").addEventListener("click", async () => {
-        // Prompt the user to enter a LinkedIn profile URL
-        const profileUrl = prompt("Enter the LinkedIn Profile URL:");
-    
-        // Validate the LinkedIn Profile URL
-        if (!profileUrl || !profileUrl.startsWith("https://www.linkedin.com/in/")) {
-            alert("Please enter a valid LinkedIn profile URL (e.g., https://www.linkedin.com/in/...).");
-            return;
-        }
-    
-        const apiKey = 'vhxSkEOOcjj7ck3RFsbTGg'; // Replace with your ProxyCurl API Key
-        const apiEndpoint = 'https://nubela.co/proxycurl/api/v2/linkedin';
-    
-        // Set up headers
-        const headers = {
-            'Authorization': `Bearer ${apiKey}`,
-        };
-    
-        // Prepare query parameters
-        const params = new URLSearchParams({
-            url: profileUrl,
-            use_cache: 'if-present',
-        });
-    
-        try {
-            // Fetch LinkedIn data from ProxyCurl
-            const response = await fetch(`${apiEndpoint}?${params}`, {
-                method: 'GET',
-                headers: headers,
-            });
-    
-            if (!response.ok) {
-                const errorText = await response.text();
-                console.error("Error Response Text:", errorText);
-                throw new Error(`Error fetching LinkedIn data: ${response.statusText}`);
-            }
-    
-            const data = await response.json(); // Parse the JSON response
-            console.log("Fetched LinkedIn Data:", data); // Debugging output
-    
-            // Automatically populate the form fields with the fetched data
-            document.getElementById("fname").value = data.full_name || "";
-            document.getElementById("lname").value = data.last_name || "";
-            document.getElementById("summary").value = data.headline || "";
-            document.getElementById("portfolio").value = data.profile_pic_url || "";
-            document.getElementById("skills").value = (data.skills || []).join(", ");
-    
-            // Save the fetched data to localStorage
-            const userData = {
-                fname: data.full_name || "",
-                lname: data.last_name || "",
-                edu: "", // Education info can be added if available in API response
-                experience: data.occupation || "",
-                skills: (data.skills || []).join(", "),
-                portfolio: data.profile_pic_url || "",
-                summary: data.headline || "",
-            };
-            localStorage.setItem("userData", JSON.stringify(userData));
-    
-            alert("Form populated with LinkedIn data successfully!");
-        } catch (error) {
-            console.error("Error:", error);
-            alert("Failed to fetch LinkedIn data. Please check the profile URL or try again.");
-        }
-    });
-    
-    
     
 
 // Save the current form data to a named profile
@@ -378,4 +311,37 @@ document.querySelector("#dashboard-table").addEventListener("click", (event) => 
         localStorage.setItem("jobApplications", JSON.stringify(jobApplications));
         loadDashboard(); // Refresh the dashboard
     }
+});
+
+
+document.getElementById("fetch_linkedin").addEventListener("click", () => {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        console.log("Active tab details:", tabs[0]); // Log active tab details
+
+        // Check if the active tab is a LinkedIn profile page
+        if (!tabs[0].url.includes("linkedin.com/in/")) {
+            alert("Please ensure you're on a LinkedIn profile page.");
+            return;
+        }
+
+        // Send message to content script
+        console.log("Sending scrape message to content script...");
+        chrome.tabs.sendMessage(tabs[0].id, { action: "scrape" }, (response) => {
+            if (chrome.runtime.lastError) {
+                console.error("Error sending message:", chrome.runtime.lastError.message);
+                alert("Error: Unable to send message to content script.");
+                return;
+            }
+            console.log("Response from content script:", response);
+            if (response && response.data) {
+                // Populate form fields with scraped data
+                document.getElementById("fname").value = response.data.fullName || "";
+                document.getElementById("experience").value = response.data.currentPosition || "";
+                document.getElementById("skills").value = (response.data.skills || []).join(", ");
+                alert("Data fetched and populated successfully!");
+            } else {
+                alert("Failed to scrape data. Ensure you're on a LinkedIn profile page.");
+            }
+        });
+    });
 });
